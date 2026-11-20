@@ -1,0 +1,22 @@
+# A general model asked to do a parser's job, through Amazon Bedrock. Same
+# input and prompt as astra.yaml.
+# max_tokens: contracts reach 38 pages in one call, so the ceiling must clear
+# about 90k output tokens; a truncated parse fails loudly instead of scoring.
+tool: fable
+setups:
+  fable:
+    vendor: Anthropic
+    variant: claude-fable-5-1 · pdf in · bedrock
+    tracked_changes_opt_in: false
+    bypasses_vendor_cache: false
+    settings:
+      model: us.anthropic.claude-fable-5-1
+      input: pdf
+      prompt: "Convert this document to clean, well-structured markdown. Reproduce the page faithfully, preserving headings, paragraphs, lists, tables and inline formatting. Output only the document content, with no commentary, preamble or code fences."
+      max_tokens: 100000
+    pricing:
+      # The us.* Bedrock profile costs 10% over the global endpoint; the region
+      # stays pinned because Fable's data-retention setting is per region.
+      usd_per_million_tokens:
+        input: 11.0
+        output: 55.0

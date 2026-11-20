@@ -1,0 +1,21 @@
+# Tracked changes are opt-in: without `change_tracking` the struck text comes
+# back as ordinary prose.
+# `build` is the date Reducto last changed the model behind r-1. It is never
+# sent, but it is part of the setup, so a parse cached before the change is
+# not reused.
+tool: reducto
+setups:
+  reducto:
+    vendor: Reducto
+    variant: model=r-1 · 2026-10-06 build
+    tracked_changes_opt_in: true   # formatting.include = change_tracking
+    bypasses_vendor_cache: true    # undocumented cache keyed on settings; a unique timeout skips it
+    settings:
+      model: r-1
+      formatting:
+        include:
+          - change_tracking
+      build: "2026-10-06"
+    pricing:
+      # $10 per 1,000 pages since 2026-09-01. Reducto returns no cost field.
+      usd_per_page: 0.01

@@ -1,0 +1,19 @@
+# Strikethrough is opt-in: without `formatting` Pulse returns deleted text as
+# ordinary prose. Tables and text refinement are on too, so this is the tool's
+# best case.
+tool: pulse
+setups:
+  pulse:
+    vendor: Pulse
+    variant: model=pulse-ultra-2
+    tracked_changes_opt_in: true   # refine_options.formatting
+    bypasses_vendor_cache: false
+    settings:
+      model: pulse-ultra-2
+      refine_options:
+        text: true
+        tables: true
+        formatting: true
+    pricing:
+      usd_per_page: 0.015
+      usd_per_credit: 0.015

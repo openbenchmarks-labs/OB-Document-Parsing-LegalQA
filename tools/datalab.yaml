@@ -1,0 +1,25 @@
+# Two endpoints, run side by side to show what the tracked-changes endpoint
+# is worth. Both get the PDF, never the .docx, which would hand over the
+# answer key.
+tool: datalab
+setups:
+  datalab:
+    vendor: Datalab
+    variant: convert · mode=accurate
+    tracked_changes_opt_in: false  # general convert endpoint, no such option
+    bypasses_vendor_cache: true    # skip_cache, documented
+    settings:
+      url: https://www.datalab.to/api/v1/convert
+      mode: accurate
+    pricing:
+      # Datalab reports final_cost_cents; this rate is only the fallback.
+      usd_per_page: 0.01
+  datalab-tc:
+    vendor: Datalab
+    variant: track-changes endpoint
+    tracked_changes_opt_in: true   # a dedicated /track-changes endpoint
+    bypasses_vendor_cache: true
+    settings:
+      url: https://www.datalab.to/api/v1/track-changes
+    pricing:
+      usd_per_page: 0.01

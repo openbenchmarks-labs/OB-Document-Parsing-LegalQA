@@ -1,0 +1,50 @@
+import json
+
+from harness import dataset
+from harness.config import EXPECTED_CASES
+
+
+def public_fixture(tmp_path):
+    (tmp_path / "data").mkdir()
+    (tmp_path / "documents").mkdir()
+    (tmp_path / "documents_scanned").mkdir()
+    (tmp_path / "views").mkdir()
+    (tmp_path / "documents/doc.pdf").write_bytes(b"%PDF fixture")
+    (tmp_path / "documents_scanned/doc.pdf").write_bytes(b"%PDF scanned fixture")
+    (tmp_path / "views/doc.oracle.md").write_text("kept ~~deleted~~")
+    (tmp_path / "views/doc.blind.md").write_text("kept deleted")
+    rows = []
+    for number in range(EXPECTED_CASES):
+        rows.append(json.dumps({
+            "id": f"q-{number:03d}", "question": "Is it kept?", "answer": "No.",
+            "documents": ["doc"], "pdf": ["documents/doc.pdf"],
+            "pdf_scanned": ["documents_scanned/doc.pdf"], "match_correct": ["No"],
+            "match_stale": ["Yes"], "match_fused": [], "task_type": "fixture",
+        }))
+    (tmp_path / "data/eval.jsonl").write_text("\n".join(rows) + "\n")
+    return tmp_path
+
+
+def test_loads_tagged_and_scanned(tmp_path):
+    root = public_fixture(tmp_path)
+    cases, tagged = dataset.load(root, "tagged")
+    _, scanned = dataset.load(root, "scanned")
+    assert len(cases) == EXPECTED_CASES
+    assert tagged["doc"].pdf.parent.name == "documents"
+    assert scanned["doc"].pdf.parent.name == "documents_scanned"
+    assert set(tagged["doc"].views) == {"oracle", "blind"}
+
+
+def test_cross_draft_view_is_chronological(tmp_path):
+    # The dataset lists the later draft first; the reader must still see turn 2
+    # before turn 3, labelled, exactly as the published board presents them.
+    later = dataset.Document("s1-t3-g01a-contract", tmp_path / "t3.pdf")
+    earlier = dataset.Document("s1-t2-g01a-contract", tmp_path / "t2.pdf")
+    documents = {later.document_id: later, earlier.document_id: earlier}
+    case = dataset.Case(id="q", question="What happened between rounds?", task_type="fixture",
+                        documents=[later.document_id, earlier.document_id],
+                        expected_answer="", expected_detail="", match={})
+    view = dataset.view_for(case, documents, {later.document_id: "LATER",
+                                              earlier.document_id: "EARLIER"})
+    assert view == ("===== DRAFT AT TURN 2 (s1-t2-g01a-contract) =====\n\nEARLIER\n\n"
+                    "===== DRAFT AT TURN 3 (s1-t3-g01a-contract) =====\n\nLATER")

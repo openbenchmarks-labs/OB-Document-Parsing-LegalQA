@@ -1,0 +1,15 @@
+# The concrete model id, not the `mistral-ocr-latest` alias, so a board number
+# names the model that produced it.
+tool: mistral
+setups:
+  mistral-ocr:
+    vendor: Mistral
+    variant: model=mistral-ocr-4-1
+    tracked_changes_opt_in: false  # no such option; emits ~~ or not
+    bypasses_vendor_cache: false
+    settings:
+      model: mistral-ocr-4-1
+    pricing:
+      # List price for plain OCR: $4 per 1,000 pages. Mistral returns only a
+      # page count.
+      usd_per_page: 0.004

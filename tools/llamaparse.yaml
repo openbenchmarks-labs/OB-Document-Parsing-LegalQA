@@ -1,0 +1,26 @@
+# Both tiers run, to show what agentic_plus buys over agentic on a redline
+# and whether it is worth 4.5x the page rate.
+# Versions are pinned, never `latest`: a rolling version means two runs of
+# one setup can score different parses.
+tool: llamaparse
+setups:
+  llamaparse:
+    vendor: LlamaParse
+    variant: tier=agentic · 2026-09-29
+    tracked_changes_opt_in: false  # emits ~~ in default markdown, nothing to enable
+    bypasses_vendor_cache: true    # disable_cache, documented (48-hour cache otherwise)
+    settings:
+      tier: agentic
+      version: "2026-09-29"
+    pricing:
+      usd_per_page: 0.0125  # list price; LlamaParse returns no cost field
+  llamaparse-plus:
+    vendor: LlamaParse
+    variant: tier=agentic_plus · 2026-09-24
+    tracked_changes_opt_in: false
+    bypasses_vendor_cache: true
+    settings:
+      tier: agentic_plus
+      version: "2026-09-24"
+    pricing:
+      usd_per_page: 0.05625

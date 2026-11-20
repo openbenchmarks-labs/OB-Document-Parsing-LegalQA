@@ -1,0 +1,22 @@
+# Highest-accuracy engine. Agentic OCR stays off: these are clean digital PDFs.
+# `change_tracking` detects insertions and deletions shown by strikethrough,
+# colored text or underline, which is the whole signal this benchmark scores.
+# `build` is the date Extend last changed strikethrough parsing. It is never
+# sent, but it is part of the setup, so an older cached parse is not reused.
+tool: extend
+setups:
+  extend:
+    vendor: Extend
+    variant: engine=parse_performance · 2026-10-17 build
+    tracked_changes_opt_in: true   # advancedOptions.formattingDetection
+    bypasses_vendor_cache: false   # every call uploads the file again
+    settings:
+      engine: parse_performance
+      advanced_options:
+        formattingDetection:
+          - type: change_tracking
+      build: "2026-10-17"
+    pricing:
+      # 2 credits a page at $0.01 a credit since 2026-10-22.
+      usd_per_page: 0.02
+      usd_per_credit: 0.01

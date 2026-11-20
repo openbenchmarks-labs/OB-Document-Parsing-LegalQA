@@ -1,0 +1,7 @@
+name: OB-LegalQA
+order:
+  serves: Teams choosing a document-parsing or vision-model tool for legal redlines and contract QA.
+  win: Higher answer accuracy on held-out legal documents under the same grading rules.
+  budget_usd: 0
+  refresh_days: 30
+  not_measured_max: 0.1

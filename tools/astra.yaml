@@ -1,0 +1,20 @@
+# A general model asked to do a parser's job. It gets the whole PDF and the
+# same prompt as every other model setup (see fable.yaml). The prompt does not
+# mention strikethrough: the parser tools are not told what this benchmark
+# looks for either.
+tool: astra
+setups:
+  astra:
+    vendor: OpenAI
+    variant: gpt-6-astra · pdf in
+    tracked_changes_opt_in: false
+    bypasses_vendor_cache: false
+    settings:
+      model: gpt-6-astra
+      input: pdf
+      prompt: "Convert this document to clean, well-structured markdown. Reproduce the page faithfully, preserving headings, paragraphs, lists, tables and inline formatting. Output only the document content, with no commentary, preamble or code fences."
+    pricing:
+      # Billed per token, so there is no page rate.
+      usd_per_million_tokens:
+        input: 10.0
+        output: 50.0

@@ -1,0 +1,16 @@
+# `best` is the profile Unstructured recommends for complex layouts and dense
+# tables. The Parse API has no strikethrough or tracked-changes option.
+tool: unstructured
+setups:
+  unstructured:
+    vendor: Unstructured
+    variant: parse · profile=best
+    tracked_changes_opt_in: false  # no such option
+    bypasses_vendor_cache: false
+    settings:
+      url: https://transform.unstructured.io/api/v2/parse
+      profile: best
+      output: markdown
+    pricing:
+      # List price: $15 per 1,000 pages. Unstructured returns only a page count.
+      usd_per_page: 0.015
